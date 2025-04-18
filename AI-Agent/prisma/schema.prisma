@@ -1,0 +1,35 @@
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearchPostgres"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Token {
+  id                  Int      @id @default(autoincrement())
+  createdAt           DateTime @default(now())
+  address             String
+  tokenLogo           String
+  tokenName           String
+  decimal             Int
+  chainId             Int
+  feeTier             Int
+  pythId              String?
+  geckoTerminalAddress String
+  isNative            Boolean
+  isStable            Boolean
+  chain               Chain    @relation(fields: [chainId], references: [chainId])
+}
+
+model Chain {
+  id                  Int      @id @default(autoincrement())
+  name                String
+  chainId             Int      @unique
+  createdAt           DateTime @default(now())
+  chainLogo           String
+  tokens              Token[]  
+}
